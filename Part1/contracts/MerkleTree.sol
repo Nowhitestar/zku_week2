@@ -11,10 +11,30 @@ contract MerkleTree is Verifier {
 
     constructor() {
         // [assignment] initialize a Merkle tree of 8 with blank leaves
+        for (uint i=0; i<8; i++) {
+            hashes.push(0);
+        }
+        hashes.push(PoseidonT3.poseidon([hashes[0], hashes[1]]));
+        hashes.push(PoseidonT3.poseidon([hashes[2], hashes[3]]));
+        hashes.push(PoseidonT3.poseidon([hashes[4], hashes[5]]));
+        hashes.push(PoseidonT3.poseidon([hashes[6], hashes[7]]));
+        hashes.push(PoseidonT3.poseidon([hashes[8], hashes[9]]));
+        hashes.push(PoseidonT3.poseidon([hashes[10], hashes[11]]));
+        hashes.push(PoseidonT3.poseidon([hashes[12], hashes[13]]));
+        
     }
 
     function insertLeaf(uint256 hashedLeaf) public returns (uint256) {
         // [assignment] insert a hashed leaf into the Merkle tree
+        hashes[index] = hashedLeaf;
+        hashes.push(PoseidonT3.poseidon([hashes[0], hashes[1]]));
+        hashes.push(PoseidonT3.poseidon([hashes[2], hashes[3]]));
+        hashes.push(PoseidonT3.poseidon([hashes[4], hashes[5]]));
+        hashes.push(PoseidonT3.poseidon([hashes[6], hashes[7]]));
+        hashes.push(PoseidonT3.poseidon([hashes[8], hashes[9]]));
+        hashes.push(PoseidonT3.poseidon([hashes[10], hashes[11]]));
+        hashes.push(PoseidonT3.poseidon([hashes[12], hashes[13]]));
+        return hashes[14];
     }
 
     function verify(
@@ -25,5 +45,6 @@ contract MerkleTree is Verifier {
         ) public view returns (bool) {
 
         // [assignment] verify an inclusion proof and check that the proof root matches current root
+        return verifyProof(a, b, c, input);
     }
 }
